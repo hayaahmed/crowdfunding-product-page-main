@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+  <title>Frontend Mentor | Crowdfunding product page</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution {
+      font-size: 11px;
+      text-align: center;
+      position: relative;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-bottom: 50px;
+
+    }
+
+    .attribution a {
+      color: hsl(228, 45%, 44%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="crowdfunding" id="root">
+    <div class="nav-bar">
+      <img src="images/logo.svg" alt="">
+      <img v-if="opened" @click="closemenu" class="close-menu" src="images/icon-close-menu.svg" alt="">
+      <img @click="showmenu" class="menu" src="images/icon-hamburger.svg" alt="">
+      <ul>
+        <li> About</li>
+        <li> Discover</li>
+        <li> Get Started </li>
+      </ul>
+    </div>
+    <div class="crowd-cont">
+      <div class="top">
+        <img class="logo" src="images/logo-mastercraft.svg" alt="">
+        <h1> Mastercraft Bamboo Monitor Riser </h1>
+        <h6> A beautiful & handcrafted monitor stand to reduce neck and eye strain.</h6>
+        <div class="btns">
+          <button @click="getmodel" class="back"> Back this project </button>
+          <button @click="pressit" class="bookmark"><span><img src="images/icon-bookmark.svg" alt=""></span> Bookmark
+            <span class="bm">ed</span></button>
+          <span @click="press" class="bookit"><img src="images/icon-bookmark.svg" alt=""></span>
+        </div>
+      </div>
+      <div class="stats">
+        <div>
+          <span>${{num1}}</span>
+          <p>of $100,000 backed</p>
+        </div>
+        <div class="split"></div>
+        <div>
+          <span>${{num2}}</span>
+          <p> total backers</p>
+        </div>
+        <div class="split"></div>
+        <div>
+          <span>{{num3}}</span>
+          <p>days left</p>
+        </div>
+        <div class="stat-prog"><span class="progress"></span></div>
+      </div>
+      <div class="About-project">
+        <h3>About this project</h3>
+        <p class="main"> The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
+          to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
+          your posture and make you more comfortable while at work, helping you stay focused on the task at hand.
+        </p>
+        <p class="sec">
+          Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
+          to allow notepads, pens, and USB sticks to be stored under the stand.
+        </p>
+        <div class="bambo">
+          <h3>Bamboo Stand</h3>
+          <h4>Pledge $ <span>{{pledge1}}</span> or more</h4>
+          <p> You get an ergonomic stand made of natural bamboo. You've helped us launch our promotional campaign, and
+            you’ll be added to a special Backer member list.</p>
+          <div class="inline">
+            <h4><span class="left1">{{l1}}</span> left</h4>
+            <button @click="getselection"> Select Reward</button>
+          </div>
+        </div>
+        <div class="black-e">
+          <h3> Black Edition Stand</h3>
+          <h4>pledge $ <span>{{pledge2}}</span> or more</h4>
+          <p> You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer
+            member list. Shipping is included.</p>
+          <div class="inline">
+            <h4><span class="left1">{{l2}}</span> left</h4>
+            <button @click="getselection">Select Reward</button>
+          </div>
+        </div>
+        <div class="Mahogany-S">
+          <h3>Mahogany Special Edition</h3>
+          <h4>pledge $ <span>{{pledge3}}</span> or more</h4>
+          <p> You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You’ll be added
+            to our Backer member list. Shipping is included.</p>
+          <div class="inline">
+            <h4><span class="left1">{{l3}}</span> left</h4>
+            <button @click="getselection"> Out of Stock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="selection">
+      <h2>Back this project</h2>
+      <span @click="close" class="close"><img src="images/icon-close-modal.svg" alt=""></span>
+      <p>Want to support us in bringing Mastercraft Bamboo Monitor Riser out in the world?</p>
+      <div class="select1">
+        <input type="radio">
+        <span class="checkmark"></span>
+        <h3> Pledge with no reward</h3>
+        <p> Choose to support us without a reward if you simply believe in our project. As a backer,
+          you will be signed up to receive product updates via email.</p>
+      </div>
+      <div class="select2">
+        <input type="radio">
+        <span @click="selectthis($event,'select2')" class="checkmark"></span>
+        <h3> Bamboo Stand</h3>
+        <h4>pledge $ <span>{{pledgeSelect1}}</span> or more</h4>
+        <h5 class="sl"><span class="left1">{{selectl1}} </span> left</h5>
+        <p> You get an ergonomic stand made of natural bamboo. You've helped us launch our promotional campaign, and
+          you’ll be added to a special Backer member list.</p>
+        <div class="enter">
+          <div class="split"></div>
+          <p> Enter your pledge</p><input type="text" value="25" v-model="input1"><span>$</span> <button
+            @click="changepledge(input1=input1)"> Continue</button>
+        </div>
+      </div>
+      <div class="select3">
+        <input type="radio">
+        <span @click="selectthis($event,'select3')" class="checkmark"></span>
+        <h3>Black Edition Stand</h3>
+        <h4>pledge $ <span>{{pledgeSelect2}}</span> or more</h4>
+        <h5 class="sl"><span class="left1">{{selectl2}} </span> left</h5>
+        <p> You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer
+          member list. Shipping is included.</p>
+        <div class="enter">
+          <div class="split"></div>
+          <p> Enter your pledge</p><input type="text" value="75" v-model="input2"><span>$</span> <button
+            @click="changepledge2(input2=input2)"> Continue</button>
+        </div>
+      </div>
+      <div class="select4">
+        <input type="radio">
+        <span @click="selectthis($event,'select4')" class="checkmark" @click="selectthis('select4')"></span>
+        <h3>Mahogany Special Edition</h3>
+        <h4>pledge $ <span>{{pledgeSelect3}}</span> or more</h4>
+        <h5 class="sl"><span class="left1">{{selectl3}} </span> left</h5>
+        <p>You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You’ll be added
+          to our Backer member list. Shipping is included.</p>
+        <div class="enter">
+          <div class="split"></div>
+          <p> Enter your pledge</p><input type="text" value="200"><span>$</span> <button> Continue</button>
+        </div>
+      </div>
+    </div>
+    <div class="thankyou" v-if="thanks">
+      <img src="images/icon-check.svg" alt="">
+      <h3>Thanks for your support!</h3>
+      <p> Your pledge brings us one step closer to sharing Mastercraft Bamboo Monitor Riser worldwide. You will get
+        an email once our campaign is completed.</p>
+      <button @click="goback"> Got it!</button>
+    </div>
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+      Coded by <a href="#">haya</a>.
+    </div>
+  </div>
+  <!-- Selection modal start -->
+  <!-- Selected pledge start -->
+  <!-- Selected pledge end -->
+
+  <!-- Selected pledge start -->
+  <!-- Selected pledge end -->
+  <!-- Selected pledge  start -->
+
+  <!-- Selected pledge end -->
+
+  <!-- Selection modal end -->
+
+  <!-- Success modal start -->
+  <!-- Success modal end -->
+  <script src="vuejs/vue.js"></script>
+  <script>
+    var ve = new Vue({
+      el: "#root",
+      data: {
+        num1: " 89,914",
+        num2: " 5,007",
+        num3: " 56",
+        pledge1: "25",
+        l1: "101",
+        pledge2: "75",
+        l2: "64",
+        pledge3: "200",
+        l3: "0",
+        pledgeSelect1: "25",
+        selectl1: "101",
+        pledgeSelect2: "75",
+        selectl2: "64",
+        pledgeSelect3: "200",
+        selectl3: "0",
+        input1: "25",
+        input2: "75",
+        thanks: false,
+        opened: false,
+
+
+
+      },
+      methods: {
+        showmenu() {
+          document.querySelector('.nav-bar ul').style.display = "block";
+          document.querySelector(".menu").style.display = "none";
+          this.opened = true;
+        },
+        closemenu() {
+          document.querySelector('.nav-bar ul').style.display = "none";
+          this.opened = false;
+          document.querySelector(".menu").style.display = "block";
+        },
+        pressit(e) {
+          e.target.classList.toggle('pressed');
+          console.log("pressed");
+        },
+        press(e) {
+          e.target.parentNode.classList.toggle("pressed");
+        },
+        close(e) {
+          document.querySelector(".popup-overlay").classList.remove("show");
+          if (e.target.parentNode.parentNode.parentNode.classList.contains("show")) {
+            e.target.parentNode.parentNode.parentNode.classList.remove("show");
+          }
+          // e.target.parentNode.remove();
+
+        },
+        getmodel(e) {
+          let overlay = document.createElement("div");
+          // Add Class To Overlay
+          overlay.className = 'popup-overlay';
+          document.body.appendChild(overlay);
+          // overlay.style.display = "block";
+          overlay.classList.add('show');
+          // Append Overlay To The Body
+
+          // document.querySelector(".selection").style.display = "block";
+          document.querySelector(".selection").classList.add("show");
+          console.log(document.querySelector(".selection"));
+          overlay.appendChild(document.querySelector(".selection"));
+
+          console.log(overlay);
+        },
+        getselection(e) {
+
+          let overlay = document.createElement("div");
+          // Add Class To Overlay
+          overlay.className = 'popup-overlay';
+          document.body.appendChild(overlay);
+          // overlay.style.display = "block";
+          overlay.classList.add('show');
+
+          // Append Overlay To The Body
+          document.querySelector(".selection").classList.add("show");
+          console.log(document.querySelector(".selection"));
+          overlay.appendChild(document.querySelector(".selection"));
+
+          console.log(overlay);
+
+
+        },
+        selectthis(e, eleclassname) {
+          document.querySelector(`.${eleclassname}`).classList.toggle("selected");
+          //document.querySelector(`.${eleclassname}`).classList.item(0);
+          document.querySelector(`.${eleclassname}`).getElementsByClassName("checkmark")[0].classList.toggle("checkeed");
+          if (document.querySelector(`.${eleclassname}`).children[6].style.display === "block") {
+            console.log(document.querySelector(`.${eleclassname}`).children[6].style.display = "none");
+            document.querySelector(`.${eleclassname}`).getElementsByClassName("enter")[0].style.display = "none";
+          }
+          else {
+            document.querySelector(`.${eleclassname}`).children[6].style.display = "block";
+          }
+
+        },
+        changepledge(inp) {
+
+          // this.pledgeSelect1 = inp;
+          this.pledge1 = inp;
+          // this.num1 = parseFloat(this.num1) + parseFloat(inp);
+          let nn1 = this.num1.split(",").join("");
+          let newest1 = parseFloat(nn1) + parseFloat(inp);
+          console.log(typeof (newest1));
+
+          if (newest1.toString().length <= 5) {
+            let p1 = newest1.toString().substring(0, 2);
+            let p2 = newest1.toString().substring(2);
+            let all = `${p1},${p2}`;
+            console.log(all);
+            this.num1 = all;
+            console.log(parseFloat(parseInt(all.split(",").join("")) / 100000) * 100);
+            document.querySelector(".stat-prog > span").style.width = `${parseFloat(parseInt(all.split(",").join("")) / 100000) * 100}%`;
+          }
+          else if (newest1.toString() === "100000") {
+            let p1 = newest1.toString().substring(0, 3);
+            let p2 = newest1.toString().substring(3);
+            let all = `${p1},${p2}`;
+            console.log(all);
+            this.num1 = all;
+            document.querySelector(".stat-prog > span").style.width = `100%`;
+          }
+          else {
+            this.num1 = "100,000";
+            document.querySelector(".stat-prog > span").style.width = `100%`;
+          }
+          let backers = (parseInt(this.num2.split(",").join(""))) + 1;
+          let p1 = backers.toString().substring(0, 1);
+          let p2 = backers.toString().substring(1);
+          let total = `${p1},${p2}`;
+          console.log(total);
+          this.num2 = total;
+          this.thanks = true;
+          this.l1 = this.l1 - 1;
+          this.selectl1 = this.selectl1 - 1;
+        },
+        changepledge2(inp2) {
+          // this.pledgeSelect2 = inp2;
+          this.pledge2 = inp2;
+          // this.num1 = parseFloat(this.num1) + parseFloat(inp);
+          let nn1 = this.num1.split(",").join("");
+          let newest1 = parseFloat(nn1) + parseFloat(inp2);
+          console.log(typeof (newest1));
+
+          if (newest1.toString().length <= 5) {
+            let p1 = newest1.toString().substring(0, 2);
+            let p2 = newest1.toString().substring(2);
+            let all = `${p1},${p2}`;
+            console.log(all);
+            this.num1 = all;
+            console.log(parseFloat(parseInt(all.split(",").join("")) / 100000) * 100);
+            document.querySelector(".stat-prog > span").style.width = `${parseFloat(parseInt(all.split(",").join("")) / 100000) * 100}%`;
+          }
+          else if (newest1.toString() === "100000") {
+            let p1 = newest1.toString().substring(0, 3);
+            let p2 = newest1.toString().substring(3);
+            let all = `${p1},${p2}`;
+            console.log(all);
+            this.num1 = all;
+            document.querySelector(".stat-prog > span").style.width = `100%`;
+          }
+          else {
+            this.num1 = "100,000";
+            document.querySelector(".stat-prog > span").style.width = `100%`;
+          }
+          let backers = (parseInt(this.num2.split(",").join(""))) + 1;
+          let p1 = backers.toString().substring(0, 1);
+          let p2 = backers.toString().substring(1);
+          let total = `${p1},${p2}`;
+          console.log(total);
+          this.num2 = total;
+          this.thanks = true;
+          this.l2 = this.l2 - 1;
+          this.selectl2 = this.selectl2 - 1;
+        },
+        goback(e) {
+          document.querySelector(".thankyou").style.display = "none";
+          this.thanks = false;
+        }
+      }
+
+    })
+  </script>
+</body>
+
+</html>
